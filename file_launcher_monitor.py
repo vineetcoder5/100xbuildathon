@@ -1,8 +1,11 @@
 import os
+import socket
 import psutil
 import wmi
 import threading
 import time
+
+SERVER_ADDRESS = ('localhost', 65432)
 
 # Global cache and lock for thread-safe PID access
 explorer_pids = set()
@@ -19,6 +22,7 @@ def refresh_explorer_pids(interval, stop_event):
         time.sleep(interval)
 
 def monitor_file_launches():
+    send_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     c = wmi.WMI(moniker="//./root/cimv2")
     watcher = c.ExecNotificationQuery(
         "SELECT * FROM __InstanceCreationEvent WITHIN 0.1 WHERE TargetInstance ISA 'Win32_Process'"
@@ -29,7 +33,7 @@ def monitor_file_launches():
     pid_refresh_thread.daemon = True
     pid_refresh_thread.start()
 
-    print("🟢 File Launcher Monitor running (without sending messages)...")
+    print("🟢 File Launcher Monitor running...")
 
     try:
         while True:
@@ -41,7 +45,9 @@ def monitor_file_launches():
             with pid_lock:
                 if parent in explorer_pids:
                     if '\"' in cmdline or os.path.exists(cmdline.split()[0]):
-                        print(f"LAUNCH DETECTED: {cmdline}")
+                        message = f"LAUNCH: {cmdline}"
+                        print(message)
+                        send_socket.sendto(message.encode(), SERVER_ADDRESS)
 
     except KeyboardInterrupt:
         stop_event.set()

@@ -1,10 +1,12 @@
 import os
+import socket
 import threading
 from datetime import datetime
 import mss
 from PIL import Image
 import time
 
+SERVER_ADDRESS = ('localhost', 65432)
 OUTPUT_DIR = "screenshots"
 MAX_SCREENSHOTS = 5
 
@@ -13,6 +15,11 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 # Start in running state
 running_event = threading.Event()
 running_event.set()  # Start taking screenshots immediately
+
+def send_to_server(message):
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+        sock.sendto(message.encode(), SERVER_ADDRESS)
+
 
 # 📸 Screenshot capturing
 def capture_screenshots():
@@ -27,6 +34,7 @@ def capture_screenshots():
                     img = sct.grab(sct.monitors[1])
                     Image.frombytes("RGB", img.size, img.rgb).save(filepath)
                     print(f"🖼️ Captured: {filepath}")
+                    send_to_server(f'SCREENSHOT: "{filepath}"')
 
                     # Cleanup old screenshots
                     files = sorted(
