@@ -26,7 +26,8 @@ if __name__ == "__main__":
             path = get_active_explorer_path()
             if path:
                 print("Active Explorer Path:", path)
-                udp_sock.sendto(path.encode('utf-8'), SERVER_ADDRESS)
+                message = f"Path: {path}"
+                udp_sock.sendto(message.encode('utf-8'), SERVER_ADDRESS)
             else:
                 print("Active window is not an Explorer folder.")
                 # Optionally send a blank message or skip:

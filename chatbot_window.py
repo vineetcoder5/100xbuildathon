@@ -180,7 +180,7 @@ def save_and_back(entries):
 
 def back_to_chat():
     # Restore header and hide overlay
-    header_label.config(text="OCTOPUSS-AI")
+    header_label.config(text="OCTOPUS")
     user_info_frame.lower()
     # Ensure chat and input are on top
     chat_frame.lift()
@@ -192,7 +192,7 @@ def check_focus():
         root.after(500, check_focus) 
 # — Build the UI —
 root = tk.Tk()
-root.title("OCTOPUSS-AI")
+root.title("OCTOPUS")
 root.iconbitmap(default=ICON_PATH)
 root.geometry("400x550")
 root.configure(bg="#f4f4f8")

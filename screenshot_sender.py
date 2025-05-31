@@ -7,6 +7,7 @@ from PIL import Image
 import time
 
 SERVER_ADDRESS = ('localhost', 65432)
+LISTEN_PORT = 65437  # Port to listen for toggle messages
 OUTPUT_DIR = "screenshots"
 MAX_SCREENSHOTS = 5
 
@@ -20,6 +21,24 @@ def send_to_server(message):
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
         sock.sendto(message.encode(), SERVER_ADDRESS)
 
+# 🔊 Listen for toggle commands from the server
+def listen_from_server():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.bind(('localhost', LISTEN_PORT))
+    print("📡 Listening for server toggle messages...")
+
+    while True:
+        data, _ = sock.recvfrom(1024)
+        message = data.decode().strip()
+        print("📩 Received toggle from server:", message)
+
+        # Toggle running state
+        if running_event.is_set():
+            running_event.clear()
+            print("⏸️ Paused screenshotting.")
+        else:
+            running_event.set()
+            print("▶️ Resumed screenshotting.")
 
 # 📸 Screenshot capturing
 def capture_screenshots():
@@ -51,4 +70,5 @@ def capture_screenshots():
             print("\n🛑 Screenshot capture stopped.")
 
 if __name__ == "__main__":
+    threading.Thread(target=listen_from_server, daemon=True).start()
     capture_screenshots()
