@@ -1,9 +1,12 @@
 # main_server.py
+from api import response
 import socket
 import re
 import os
 from collections import deque
 import time
+from extract_json import extract_and_execute
+import json
 # Dictionary to store file info
 
 recent_path = None
@@ -69,7 +72,21 @@ def search_file():
             return "Not Found"
     return "Not Found"
 
-        
+def update_message(Current_message):
+    HISTORY_FILE = "chat_history.json"
+    message_history = []
+    if os.path.exists(HISTORY_FILE):
+        with open(HISTORY_FILE, "r", encoding="utf-8") as f:
+            try:
+                old_history = json.load(f)
+                for sender, msg in old_history:
+                    message_history.append((sender, msg))
+            except json.JSONDecodeError:
+                pass 
+    Current_message = Current_message.decode().strip()
+    message_history.append(("server", Current_message))
+    with open(HISTORY_FILE, "w", encoding="utf-8") as f:
+        json.dump(message_history, f, ensure_ascii=False, indent=2)       
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 def chatbot_clicked():
@@ -87,9 +104,28 @@ def chatbot_clicked():
         elif message == "CHATBOT: Chatbot closed":
             break
         elif message:
-            #here the logic og llm call will go
-            server_socket.sendto("llm response", ('localhost', 65436))
-
+            # print("click")
+            # print(message)
+            # continue
+            ans = search_file()
+            # print(recent_path)
+            if ans == "Not Found" or ans == "Google Chrome":
+                print("image")
+                resul = response(message,recent_path)
+            else: 
+                print("file")
+                # print(ans)
+                recent_path = ans[1]
+                resul = response(message,recent_path,ans[0],ans[1])
+            resull = resul.encode("utf-8")
+            try:
+                server_socket.sendto(resull, ('localhost', 65436))
+            except:
+                print("error")
+                update_message(resull)
+            resul = extract_and_execute(resul)
+            resul = resul.encode("utf-8")
+            server_socket.sendto(resul, ('localhost', 65436))
     print("done")
     notify_monitors()
     # time.sleep(5)
@@ -98,9 +134,7 @@ def start_server():
     global recent_path
     # server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     server_socket.bind(('localhost', 65432))
-
     print("📋 Server listening for messages...\n")
-    
     while True:
         data, _ = server_socket.recvfrom(1024)
         message = data.decode()
@@ -126,4 +160,12 @@ def start_server():
             print(f"[Unknown Source] {message.strip()}")
 
 if __name__ == "__main__":
-    start_server()
+    while True:
+        try:
+            server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            start_server()
+        except ConnectionResetError:
+            print("Client forcibly closed the connection. Continuing...")
+        except Exception as e:
+            print("Client forcibly closed the connection. Continuing...")
+        
