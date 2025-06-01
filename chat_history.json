@@ -18,5 +18,25 @@
   [
     "server",
     "Hello! How can I assist you today?"
+  ],
+  [
+    "user",
+    "hi"
+  ],
+  [
+    "user",
+    "hi"
+  ],
+  [
+    "user",
+    "hi"
+  ],
+  [
+    "server",
+    "Don't Close chat bot while generating response"
+  ],
+  [
+    "user",
+    "hi"
   ]
 ]

@@ -152,7 +152,7 @@ user:- can you open download foalder
     api_input = [system_prompt] + conversation
 
     # Call OpenAI API
-    client = OpenAI(api_key="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")
+    client = OpenAI(api_key="")
     response = client.responses.create(
         model="gpt-4.1-mini",
         input=api_input,
