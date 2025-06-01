@@ -209,7 +209,7 @@ header = tk.Frame(root, bg="#a259ff", height=60)
 header.pack(fill=tk.X)
 header_label = tk.Label(
     header,
-    text="OCTOPUSS-AI",
+    text="OCTOPUS",
     fg="white",
     bg="#a259ff",
     font=("Arial", 14, "bold")

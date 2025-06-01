@@ -83,7 +83,7 @@ def update_message(Current_message):
                     message_history.append((sender, msg))
             except json.JSONDecodeError:
                 pass 
-    Current_message = Current_message.decode().strip()
+    Current_message = Current_message
     message_history.append(("server", Current_message))
     with open(HISTORY_FILE, "w", encoding="utf-8") as f:
         json.dump(message_history, f, ensure_ascii=False, indent=2)       
@@ -117,15 +117,20 @@ def chatbot_clicked():
                 # print(ans)
                 recent_path = ans[1]
                 resul = response(message,recent_path,ans[0],ans[1])
-            resull = resul.encode("utf-8")
-            try:
+            # resull = resul.encode("utf-8")
+            # server_socket.sendto(resull, ('localhost', 65436))
+            data = json.loads(resul)
+            if len(data.get("python_code", "")) != 0:
+                resull = data.get("answer", "")+" executing the task. please wait"
+                resull = resull.encode("utf-8")
                 server_socket.sendto(resull, ('localhost', 65436))
-            except:
-                print("error")
-                update_message(resull)
-            resul = extract_and_execute(resul)
-            resul = resul.encode("utf-8")
-            server_socket.sendto(resul, ('localhost', 65436))
+                resul = extract_and_execute(resul)
+                resul = resul.encode("utf-8")
+                server_socket.sendto(resul, ('localhost', 65436))
+            else:
+                resull = data.get("answer", "")
+                resull = resull.encode("utf-8")
+                server_socket.sendto(resull, ('localhost', 65436))
     print("done")
     notify_monitors()
     # time.sleep(5)
@@ -166,6 +171,11 @@ if __name__ == "__main__":
             start_server()
         except ConnectionResetError:
             print("Client forcibly closed the connection. Continuing...")
+            update_message("Don't Close chat bot while generating response")
+            notify_monitors()
+            
         except Exception as e:
             print("Client forcibly closed the connection. Continuing...")
+            update_message("Don't Close chat bot while generating response")
+            notify_monitors()
         
