@@ -200,8 +200,8 @@ root.resizable(False, False)
 
 # Close/minimize bindings
 root.protocol("WM_DELETE_WINDOW", on_close)
-# root.bind("<Unmap>", on_close)
-root.after(1000, check_focus)
+root.bind("<Unmap>", on_close)
+# root.after(1000, check_focus)
 
 
 # Header

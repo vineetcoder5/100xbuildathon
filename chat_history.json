@@ -2,41 +2,5 @@
   [
     "server",
     "Hello and welcome to OCTOPUS🐙 I’m your Personal Dekstop assistant, here to help and answer questions."
-  ],
-  [
-    "user",
-    "explain me this ppt"
-  ],
-  [
-    "server",
-    "This presentation covers Software Project Management, explaining key concepts like project planning, cost estimation models (including COCOMO), software size metrics (LOC and Function Points), scheduling (including Gantt and PERT charts), risk management, configuration management, and different team organization structures. It highlights the importance of accurate estimations for size, effort, duration, cost, and staffing, discusses project monitoring techniques like critical path method and scheduling tools, and addresses risk containment and configuration control to ensure project success."
-  ],
-  [
-    "user",
-    "hi"
-  ],
-  [
-    "server",
-    "Hello! How can I assist you today?"
-  ],
-  [
-    "user",
-    "hi"
-  ],
-  [
-    "user",
-    "hi"
-  ],
-  [
-    "user",
-    "hi"
-  ],
-  [
-    "server",
-    "Don't Close chat bot while generating response"
-  ],
-  [
-    "user",
-    "hi"
   ]
 ]

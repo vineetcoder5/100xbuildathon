@@ -112,14 +112,17 @@ def chatbot_clicked():
             if ans == "Not Found" or ans == "Google Chrome":
                 print("image")
                 resul = response(message,recent_path)
+                print("done")
             else: 
                 print("file")
                 # print(ans)
                 recent_path = ans[1]
                 resul = response(message,recent_path,ans[0],ans[1])
+                print("done")
             # resull = resul.encode("utf-8")
             # server_socket.sendto(resull, ('localhost', 65436))
             data = json.loads(resul)
+            print(data)
             if len(data.get("python_code", "")) != 0:
                 resull = data.get("answer", "")+" executing the task. please wait"
                 resull = resull.encode("utf-8")
