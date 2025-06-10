@@ -2,7 +2,7 @@
 
 An AI-powered desktop agent that lives as a floating widget on your screen and expands into a powerful chatbot when clicked. Like Google’s Project Astra, but made for your desktop — it understands your real-time context across applications like Chrome, PDF viewers, Office apps, and more.
 
-No need to upload files, take screenshots, or switch tabs. Just ask your question, and OctopussAI gives instant answers or performs actions — **right where you are**.
+No need to upload files, take screenshots, or switch tabs. Just ask your question, and Dekstop assistant will gives instant answers or performs actions — **right where you are**.
 
 ---
 
