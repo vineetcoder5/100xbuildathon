@@ -29,8 +29,7 @@ No need to upload files, take screenshots, or switch tabs. Just ask your questio
 - **Python** for main logic
 - **Tkinter** for GUI
 - **pywin32** for window and application control
-- **Tesseract OCR** (optional) for screen content extraction
-- **Custom API Backend** (Flask/FastAPI or MCP)
+- **Custom API Backend** (MCP)
 
 ---
 
